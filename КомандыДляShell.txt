@@ -1,0 +1,58 @@
+C:\Users\Anna\HomeWorks\2\NewsPaper>python manage.py makemigrations
+Was post.post_raiting renamed to post.post_rating (a IntegerField)? [y/N] y
+Migrations for 'news':
+  news\migrations\0004_rename_post_raiting_post_post_rating.py
+    - Rename field post_raiting on post to post_rating
+
+C:\Users\Anna\HomeWorks\2\NewsPaper>python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, news, sessions
+Running migrations:
+  Applying news.0004_rename_post_raiting_post_post_rating... OK
+
+C:\Users\Anna\HomeWorks\2\NewsPaper>python manage.py shell
+Python 3.10.10 (tags/v3.10.10:aad5f6a, Feb  7 2023, 17:20:36) [MSC v.1929 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from news.models import Author
+>>> from news.models import User
+>>> from news.models import Categories
+>>> from news.models import Post
+>>> from news.models import Comment
+>>> from news.models import PostCategory
+>>> user2 = User.objects.create_user(username = 'Userrrr22')
+>>> user1 = User.objects.create_user(username = 'Userrrr11')
+>>> author1 = Author.objects.create(author_name=user1)
+>>> author2 = Author.objects.create(author_name=user2)
+>>> category1 = Categories.objects.create(category_name = Categories.politics)
+>>> category2 = Categories.objects.create(category_name = Categories.sport)
+>>> category3 = Categories.objects.create(category_name = Categories.science)
+>>> category4 = Categories.objects.create(category_name = Categories.education)
+>>> post1 = Post.objects.create(author_id =author1, post_type = Post.news, post_title = 'Science in our life')
+>>> post1.category_id.add(category4)
+>>> post2 = Post.objects.create(author_id =author1, post_type = Post.article, post_title = 'Politics in sport')
+>>> post2.category_id.add(category1)
+>>> post2.category_id.add(category2)
+>>> post3 = Post.objects.create(author_id =author2, post_type = Post.article, post_title = 'Problems of universities')
+>>> post3.category_id.add(category3)
+>>> com1 = Comment.objects.create(post = post1, user = user1, comment_text = 'Perfect')
+>>> com2 = Comment.objects.create(post = post2, user = user1, comment_text = 'Not bad')
+>>> com3 = Comment.objects.create(post = post2, user = user1, comment_text = 'It is true!')
+>>> com4 = Comment.objects.create(post = post3, user = user2, comment_text = 'Perhaps')
+>>> post1.like()
+>>> post2.like()
+>>> post3.like()
+>>> com1.like()
+>>> com2.like()
+>>> com3.like()
+>>> com4.like()
+>>>
+>>> com4.like()
+>>> com4.dislike()
+>>> com3.comment_rating
+1
+>>> com4.like()
+>>> com4.comment_rating
+2
+>>> Comment.objects.all().order_by('-comment_rating')
+
